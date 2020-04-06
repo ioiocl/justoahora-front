@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "./Loader";
 import "./App.css";
 import Strapi from "strapi-sdk-javascript/build/main";
-const apiUrl = process.env.API_URL || "http://localhost:1337";
+const apiUrl = process.env.API_URL || "https://justo-back.herokuapp.com";
 const strapi = new Strapi(apiUrl);
 
 class App extends Component {
