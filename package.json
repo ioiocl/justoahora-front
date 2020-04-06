@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "13.8.x"
+    "node": "12.16.x"
   },
   "dependencies": {
     "gestalt": "^0.79.1",
