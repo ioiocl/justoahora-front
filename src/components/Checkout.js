@@ -9,7 +9,7 @@ import { withRouter } from "react-router-dom";
 import Strapi from "strapi-sdk-javascript/build/main";
 
 
-const apiUrl = process.env.API_URL || "https://justo-back.herokuapp.com";
+const apiUrl = process.env.API_URL || "http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337";
 const strapi = new Strapi(apiUrl);
 
 class _CheckoutForm extends React.Component {

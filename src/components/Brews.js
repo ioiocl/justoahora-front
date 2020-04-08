@@ -4,7 +4,7 @@ import Strapi from "strapi-sdk-javascript/build/main";
 import { Box, Heading, Text, Image, Card, Button, Mask, IconButton } from "gestalt";
 import { calculatePrice, setCart, getCart } from "../utils";
 import { Link } from "react-router-dom";
-const apiUrl = process.env.API_URL || "https://justo-back.herokuapp.com";
+const apiUrl = process.env.API_URL || "http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337";
 const strapi = new Strapi(apiUrl);
 
 class Brews extends React.Component {
