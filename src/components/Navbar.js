@@ -97,7 +97,7 @@ const UnAuthNav = () => (
         {/* Title */}
         <div className="main-title">
           <Heading size="xs" color="orange">
-            BrewHaha
+            Justo Ahora
           </Heading>
         </div>
       </Box>
