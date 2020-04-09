@@ -19,10 +19,10 @@ class Brews extends React.Component {
       const response = await strapi.request("POST", "/graphql", {
         data: {
           query: `query {
-          brand(id: "${this.props.match.params.brandId}") {
+          comerciante(id: "${this.props.match.params.brandId}") {
             _id
             name
-            brews {
+            productos {
               _id
               name
               description
@@ -36,8 +36,8 @@ class Brews extends React.Component {
         }
       });
       this.setState({
-        brews: response.data.brand.brews,
-        brand: response.data.brand.name,
+        brews: response.data.comerciante.productos,
+        brand: response.data.comerciante.name,
         cartItems: getCart()
       });
     } catch (err) {

@@ -73,7 +73,7 @@ class _CheckoutForm extends React.Component {
       window.Mercadopago.createToken(form, (status, response)=>{
         let token = response.id
 
-        strapi.createEntry("orders", {
+        strapi.createEntry("ordenes", {
           amount,
           brews: cartItems,
           city,

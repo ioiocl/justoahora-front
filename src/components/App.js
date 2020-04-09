@@ -20,7 +20,7 @@ class App extends Component {
       const response = await strapi.request("POST", "/graphql", {
         data: {
           query: `query {
-            brands {
+            comerciantes {
               _id
               name
               description
@@ -32,7 +32,7 @@ class App extends Component {
         }
       });
       // console.log(response);
-      this.setState({ brands: response.data.brands, loadingBrands: false });
+      this.setState({ brands: response.data.comerciantes, loadingBrands: false });
     } catch (err) {
       console.error(err);
       this.setState({ loadingBrands: false });
@@ -56,7 +56,7 @@ class App extends Component {
     const response = await strapi.request("POST", "/graphql", {
       data: {
         query: `query {
-          brands(where: {
+          comerciantes(where: {
             name_contains: "${this.state.searchTerm}"
           }) {
             _id
@@ -69,9 +69,9 @@ class App extends Component {
         }`
       }
     });
-    // console.log(this.state.searchTerm, response.data.brands);
+    // console.log(this.state.searchTerm, response.data.comerciantes);
     this.setState({
-      brands: response.data.brands,
+      brands: response.data.comerciantes,
       loadingBrands: false
     });
   };
