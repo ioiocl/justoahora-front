@@ -25,7 +25,7 @@ const AuthNav = ({ handleSignout }) => (
     alignItems="center"
     justifyContent="around"
     height={70}
-    color="midnight"
+    color="eggplant"
     padding={1}
     shape="roundedBottom"
   >
@@ -72,7 +72,7 @@ const UnAuthNav = () => (
     alignItems="center"
     justifyContent="around"
     height={70}
-    color="midnight"
+    color="eggplant"
     padding={1}
     shape="roundedBottom"
   >

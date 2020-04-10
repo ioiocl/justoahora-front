@@ -1,10 +1,24 @@
 import React, { Component } from "react";
 // prettier-ignore
-import { Container, Box, Heading, Card, Image, Text, SearchField, Icon } from "gestalt";
+import { Container, Box, Heading, Image, Text, SearchField, Icon } from "gestalt";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
 import "./App.css";
 import Strapi from "strapi-sdk-javascript/build/main";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+/****MATERIAL */
+import { makeStyles } from '@material-ui/core/styles';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
+
+//const classes = useStyles();
+
 const apiUrl = process.env.API_URL || "http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337";
 const strapi = new Strapi(apiUrl);
 
@@ -15,6 +29,7 @@ class App extends Component {
     loadingBrands: true
   };
 
+  
   async componentDidMount() {
     try {
       const response = await strapi.request("POST", "/graphql", {
@@ -79,6 +94,26 @@ class App extends Component {
   render() {
     const { searchTerm, loadingBrands, brands } = this.state;
 
+    const listaProductos = {
+      root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        backgroundColor: '#64b5f6',
+      },
+      gridList: {
+        width: 500,
+        height: 450,
+      },
+      icon: {
+        color: 'rgba(255, 255, 255, 0.54)',
+      },
+    };
+
+
+ 
+
     return (
       <Container>
         {/* Brands Search Field */}
@@ -88,7 +123,7 @@ class App extends Component {
             accessibilityLabel="Brands Search Field"
             onChange={this.handleChange}
             value={searchTerm}
-            placeholder="Search Brands"
+            placeholder="Busca productos, proveedores, servicios ..."
           />
           <Box margin={3}>
             <Icon
@@ -101,57 +136,41 @@ class App extends Component {
         </Box>
 
         {/* Brands Section */}
-        <Box display="flex" justifyContent="center" marginBottom={2}>
-          {/* Brands Header */}
-          <Heading color="midnight" size="xs">
-            Distancia
-          </Heading>
-        </Box>
+    <div className={listaProductos.root}>
+      <GridList cellHeight={180} className={listaProductos.gridList}>
+        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+          <ListSubheader component="div"></ListSubheader>
+        </GridListTile>
+        {brands.map((tile) => (
+
+
+          <GridListTile key={tile._id}>
+            <img src= {`${apiUrl}${tile.image.url}`}  alt={tile.description} />
+          <Link to={`/${tile._id}`}>
+
+            
+            <GridListTileBar
+              title={tile.description}
+              subtitle={<span>by: {tile.name}</span>}
+              actionIcon={
+                <IconButton aria-label={`info about ${tile.description}`} className={listaProductos.icon}>
+                  <InfoIcon />
+                </IconButton>
+              }
+            />
+          </Link>
+
+          </GridListTile>
+
+
+
+        ))}
+      </GridList>
+    </div>
+
+
         {/* Brands */}
-        <Box
-          dangerouslySetInlineStyle={{
-            __style: {
-              backgroundColor: "#d6c8ec"
-            }
-          }}
-          shape="rounded"
-          wrap
-          display="flex"
-          justifyContent="around"
-        >
-          {brands.map(brand => (
-            <Box paddingY={4} margin={2} width={200} key={brand._id}>
-              <Card
-                image={
-                  <Box height={200} width={200}>
-                    <Image
-                      fit="cover"
-                      alt="Brand"
-                      naturalHeight={1}
-                      naturalWidth={1}
-                      src={`${apiUrl}${brand.image.url}`}
-                    />
-                  </Box>
-                }
-              >
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  direction="column"
-                >
-                  <Text bold size="xl">
-                    {brand.name}
-                  </Text>
-                  <Text>{brand.description}</Text>
-                  <Text bold size="xl">
-                    <Link to={`/${brand._id}`}>Ver Productos</Link>
-                  </Text>
-                </Box>
-              </Card>
-            </Box>
-          ))}
-        </Box>
+
         {/* <Spinner show={loadingBrands} accessibilityLabel="Loading Spinner" /> */}
         <Loader show={loadingBrands} />
       </Container>
