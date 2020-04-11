@@ -267,7 +267,7 @@ class Brews extends React.Component {
           ))}
 
 
-</Carousel>;
+</Carousel>
 
           </Container>
 
