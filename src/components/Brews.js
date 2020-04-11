@@ -1,26 +1,34 @@
 import React from "react";
 import Strapi from "strapi-sdk-javascript/build/main";
 // prettier-ignore
-import { Box, Heading, Text, Image, Mask } from "gestalt";
+
 import { calculatePrice, setCart, getCart } from "../utils";
-import { Link } from "react-router-dom";
+
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
-import clsx from 'clsx';
+
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
+
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
+
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import IconButton from '@material-ui/core/IconButton';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+//import Carousel from 'react-material-ui-carousel'
+import Paper from '@material-ui/core'
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import Divider from '@material-ui/core/Divider';
+
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
 
@@ -100,76 +108,73 @@ class Brews extends React.Component {
     const { brand, brews, cartItems } = this.state;
     const cardStyle = {
       root: {
-        maxWidth: 345,
+        display: 'block',
+        width: '30vw',
+        transitionDuration: '0.3s',
+        height: '25vw'
       },
       media: {
-        height: 140,
-        paddingTop: '56%'
+        width: '30px',
+        
       },
     }
 
-
-
-
-    const theme = createMuiTheme({
-      status: {
-        danger: 'orange',
-      },
-    });
-
-    const listaProducts = {
+    const carrouselStyle = {
       root: {
-        maxWidth: 345,
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        backgroundColor: '#424242',
       },
-      media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9,
-        marginTop:'30'
+      gridList: {
+       
+        flexWrap: 'nowrap',
+        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+        transform: 'translateZ(0)',
+
       },
-      expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-          duration: theme.transitions.duration.shortest,
-        }),
+      title: {
+        color: '#4791db',
       },
-      expandOpen: {
-        transform: 'rotate(180deg)',
-      },
-      avatar: {
-        backgroundColor: red[500],
+      titleBar: {
+        background:
+          'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
       },
     }
 
+    const responsive = {
+      desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 3,
+        slidesToSlide: 3 // optional, default to 1.
+      },
+      tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 2,
+        slidesToSlide: 2 // optional, default to 1.
+      },
+      mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 2,
+        slidesToSlide: 1 // optional, default to 1.
+      }
+    };
 
     return (
+      <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth="sm">
+        
 
-      
-      <Box
-        marginTop={4}
-        display="flex"
-        justifyContent="center"
-        alignItems="start"
-        dangerouslySetInlineStyle={{
-          __style: {
-            flexWrap: "wrap-reverse"
-          }
-        }}
-      >
-        {/* Brews Section */}
-        <Box display="flex" direction="column" alignItems="center">
-          {/* Brews Heading */}
-          <Box margin={2}>
-
-          <Card className={cardStyle.root}>
+        <Card className={cardStyle.root} >
             <CardActionArea>
-              <CardMedia
-                component="img"
-                className={cardStyle.media}
-                image="http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337/uploads/7df9ebf0acc044f1bfbed43fb4533e37.jpg"
-                title="Contemplative Reptile"
-               
-              />
+
+
+              <CardMedia title="Title">
+                <img src="http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337/uploads/7df9ebf0acc044f1bfbed43fb4533e37.jpg" className={cardStyle.media} />
+              </CardMedia>
+
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
                 {brand}
@@ -191,161 +196,58 @@ class Brews extends React.Component {
           </Card>
 
 
-            
-          </Box>
-          {/* Brews */}
-          <Box
-            dangerouslySetInlineStyle={{
-              __style: {
-                backgroundColor: "#F0F0F0"
-              }
-            }}
-            wrap
-            shape="rounded"
-            display="flex"
-            justifyContent="center"
-            padding={4}
-          >
-            {brews.map(brew => (
 
 
-  <Card className={listaProducts.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={listaProducts.avatar}>
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={brew.name}
-        subheader={brew.description}
-      />
-      <CardMedia
-        component="img"
-        className={listaProducts.media}
-        image={`${apiUrl}${brew.image.url}`}
-        title="Paella dish"
-      />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(listaProducts.expand, {
-            [listaProducts.expandOpen]: this.state.expanded,
-          })}
-          
-          aria-expanded={this.state.expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-            minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-            heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-            browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-            and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-            pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-            without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-            medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-            again without stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don’t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
+
+      </Container>
+
+      <Divider />
+      <br/>
+
+      <Container maxWidth="lg">
 
 
 
 
 
- 
-            ))}
-          </Box>
-        </Box>
+          <Carousel
+  swipeable={false}
+  draggable={false}
+  showDots={true}
+  responsive={responsive}
+  ssr={true} // means to render carousel on server-side.
+  infinite={true}
+  autoPlay={this.props.deviceType !== "mobile" ? false : false}
+  autoPlaySpeed={1000}
+  keyBoardControl={true}
+  customTransition="all .5"
+  transitionDuration={500}
+  containerClass="carousel-container"
+  removeArrowOnDeviceType={["tablet", "mobile"]}
+  deviceType={this.props.deviceType}
+  dotListClass="custom-dot-list-style"
+  itemClass="carousel-item-padding-40-px"
+>
 
-        {/* User Cart */}
-        <Box alignSelf="end" marginTop={2} marginLeft={8}>
-          <Mask shape="rounded" wash>
-            <Box
-              display="flex"
-              direction="column"
-              alignItems="center"
-              padding={2}
-            >
-              {/* User Cart Heading */}
-              <Heading align="center" size="sm">
-                Your Cart
-              </Heading>
-              <Text color="gray" italic>
-                {cartItems.length} items selected
-              </Text>
 
-              {/* Cart Items */}
-              {cartItems.map(item => (
-                <Box key={item._id} display="flex" alignItems="center">
-                  <Text>
-                    {item.name} x {item.quantity} - $
-                    {(item.quantity * item.price).toFixed(2)}
-                  </Text>
-                  <IconButton
-                    accessibilityLabel="Delete Item"
-                    icon="cancel"
-                    size="sm"
-                    iconColor="red"
-                    onClick={() => this.deleteItemFromCart(item._id)}
-                  />
-                </Box>
-              ))}
 
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                direction="column"
-              >
-                <Box margin={2}>
-                  {cartItems.length === 0 && (
-                    <Text color="red">Please select some items</Text>
-                  )}
-                </Box>
-                <Text size="lg">Total: {calculatePrice(cartItems)}</Text>
-                <Text>
-                  <Link to="/checkout">Checkout</Link>
-                </Text>
-              </Box>
-            </Box>
-          </Mask>
-        </Box>
-      </Box>
+          {brews.map((tile) => (
+                <div>
+                  <img src={`${apiUrl}${tile.image.url}`} alt={tile.name} width="50%" />
+                </div>
+          ))}
+
+
+</Carousel>;
+
+          </Container>
+
+    </React.Fragment>
+
+
+
+
+
     );
   }
 }
