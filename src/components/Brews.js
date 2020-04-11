@@ -223,7 +223,7 @@ class Brews extends React.Component {
   customTransition="all .5"
   transitionDuration={500}
   containerClass="carousel-container"
-  removeArrowOnDeviceType={["tablet", "mobile"]}
+  removeArrowOnDeviceType={[]}
   deviceType={this.props.deviceType}
   dotListClass="custom-dot-list-style"
   itemClass="carousel-item-padding-40-px"
