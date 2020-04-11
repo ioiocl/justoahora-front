@@ -33,6 +33,7 @@ const Root = () => (
         <Route component={Signup} path="/signup" />
         <PrivateRoute component={Checkout} path="/checkout" />
         <Route component={Brews} path="/:brandId" />
+        
       </Switch>
     </React.Fragment>
   </Router>

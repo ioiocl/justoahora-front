@@ -16,8 +16,13 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-//const classes = useStyles();
+
 
 const apiUrl = process.env.API_URL || "http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337";
 const strapi = new Strapi(apiUrl);
@@ -111,7 +116,13 @@ class App extends Component {
       },
     };
 
+    const bottomNav = {
+      root: {
+        width: 500,
+      },
+    }
 
+    
  
 
     return (
@@ -168,6 +179,13 @@ class App extends Component {
       </GridList>
     </div>
 
+    <BottomNavigation
+      className={bottomNav.root}
+    >
+      <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+    </BottomNavigation>
 
         {/* Brands */}
 
