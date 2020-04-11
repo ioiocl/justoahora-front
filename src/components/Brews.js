@@ -233,7 +233,7 @@ class Brews extends React.Component {
 
           {brews.map((tile) => (
                 <div>
-                  <img src={`${apiUrl}${tile.image.url}`} alt={tile.name} width="50%" />
+                  <img src={`${apiUrl}${tile.image.url}`} alt={tile.name} width="80%" />
                 </div>
           ))}
 
