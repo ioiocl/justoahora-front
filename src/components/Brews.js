@@ -3,7 +3,8 @@ import Strapi from "strapi-sdk-javascript/build/main";
 // prettier-ignore
 
 import { calculatePrice, setCart, getCart } from "../utils";
-
+import { Box, Heading, Text, Image, Mask } from "gestalt";
+import { Link } from "react-router-dom";
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
 
@@ -23,6 +24,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import Icon from '@material-ui/core/Icon';
 //import Carousel from 'react-material-ui-carousel'
 import Paper from '@material-ui/core'
 import Carousel from 'react-multi-carousel';
@@ -119,6 +121,9 @@ class Brews extends React.Component {
         width: '30px',
         
       },
+      div : {
+        width: '90%'
+      }
     }
 
     const carrouselStyle = {
@@ -212,29 +217,54 @@ class Brews extends React.Component {
 
 
           <Carousel
-  swipeable={false}
-  draggable={false}
-  showDots={true}
-  responsive={responsive}
-  ssr={true} // means to render carousel on server-side.
-  infinite={true}
-  autoPlay={this.props.deviceType !== "mobile" ? false : false}
-  autoPlaySpeed={1000}
-  keyBoardControl={true}
-  customTransition="all .5"
-  transitionDuration={500}
-  containerClass="carousel-container"
-  removeArrowOnDeviceType={[]}
-  deviceType={this.props.deviceType}
-  dotListClass="custom-dot-list-style"
-  itemClass="carousel-item-padding-40-px"
->
+            swipeable={false}
+            draggable={false}
+            showDots={false}
+            responsive={responsive}
+            ssr={true} // means to render carousel on server-side.
+            infinite={true}
+            autoPlay={this.props.deviceType !== "mobile" ? false : false}
+            autoPlaySpeed={1000}
+            keyBoardControl={true}
+            customTransition="all .5"
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={[]}
+            deviceType={this.props.deviceType}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+            
+          >
 
 
 
           {brews.map((tile) => (
-                <div>
-                  <img src={`${apiUrl}${tile.image.url}`} alt={tile.name} width="80%" />
+                <div  style={cardStyle.div} >
+                  <Card className={cardStyle.root}  >
+                    <CardActionArea>
+
+                      <CardMedia title="Title" >
+                        <img src={`${apiUrl}${tile.image.url}`} className={cardStyle.media} />
+                      </CardMedia>
+
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                        {tile.name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                        {tile.description}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions style={{justifyContent: 'center'}}>
+                      <Button size="small" color="primary">
+                        <Icon style={{ fontSize: 50 }}>share</Icon>
+                      </Button>
+                      <Button size="small" color="primary">
+                        <Icon style={{ fontSize: 50 }} onClick={() => this.addToCart(tile)} >add_shopping_cart</Icon>
+                      </Button>
+                    </CardActions>
+                  </Card>
                 </div>
           ))}
 
@@ -242,6 +272,59 @@ class Brews extends React.Component {
 </Carousel>;
 
           </Container>
+
+          <Box alignSelf="end" marginTop={2} marginLeft={8}>
+          <Mask shape="rounded" wash>
+            <Box
+              display="flex"
+              direction="column"
+              alignItems="center"
+              padding={2}
+            >
+              {/* User Cart Heading */}
+              <Heading align="center" size="sm">
+                Your Cart
+              </Heading>
+              <Text color="gray" italic>
+                {cartItems.length} items selected
+              </Text>
+
+              {/* Cart Items */}
+              {cartItems.map(item => (
+                <Box key={item._id} display="flex" alignItems="center">
+                  <Text>
+                    {item.name} x {item.quantity} - $
+                    {(item.quantity * item.price).toFixed(2)}
+                  </Text>
+                  <IconButton
+                    accessibilityLabel="Delete Item"
+                    icon="cancel"
+                    size="sm"
+                    iconColor="red"
+                    onClick={() => this.deleteItemFromCart(item._id)}
+                  />
+                </Box>
+              ))}
+
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                direction="column"
+              >
+                <Box margin={2}>
+                  {cartItems.length === 0 && (
+                    <Text color="red">Please select some items</Text>
+                  )}
+                </Box>
+                <Text size="lg">Total: {calculatePrice(cartItems)}</Text>
+                <Text>
+                  <Link to="/checkout">Checkout</Link>
+                </Text>
+              </Box>
+            </Box>
+          </Mask>
+        </Box>
 
     </React.Fragment>
 
