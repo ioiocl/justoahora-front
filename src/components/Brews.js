@@ -41,7 +41,8 @@ class Brews extends React.Component {
     brews: [],
     brand: "",
     cartItems: [],
-    expanded: false
+    expanded: false,
+    description:""
   };
 
   async componentDidMount() {
@@ -68,6 +69,7 @@ class Brews extends React.Component {
       this.setState({
         brews: response.data.comerciante.productos,
         brand: response.data.comerciante.name,
+        description: response.data.comerciante.description,
         cartItems: getCart()
       });
     } catch (err) {
@@ -105,7 +107,7 @@ class Brews extends React.Component {
 
 
   render() {
-    const { brand, brews, cartItems } = this.state;
+    const { brand, brews, cartItems, description } = this.state;
     const cardStyle = {
       root: {
         display: 'block',
@@ -180,8 +182,7 @@ class Brews extends React.Component {
                 {brand}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                  across all continents except Antarctica
+                Desayunos con sentido
                 </Typography>
               </CardContent>
             </CardActionArea>
