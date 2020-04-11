@@ -257,9 +257,7 @@ class Brews extends React.Component {
                       </CardContent>
                     </CardActionArea>
                     <CardActions style={{justifyContent: 'center'}}>
-                      <Button size="small" color="primary">
-                        <Icon style={{ fontSize: 50 }}>share</Icon>
-                      </Button>
+
                       <Button size="small" color="primary">
                         <Icon style={{ fontSize: 50 }} onClick={() => this.addToCart(tile)} >add_shopping_cart</Icon>
                       </Button>
