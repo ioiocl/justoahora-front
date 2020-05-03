@@ -19,6 +19,8 @@ import { red } from '@material-ui/core/colors';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import ChatIcon from '@material-ui/icons/Forum';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -26,10 +28,18 @@ import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Icon from '@material-ui/core/Icon';
 //import Carousel from 'react-material-ui-carousel'
-import Paper from '@material-ui/core'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Divider from '@material-ui/core/Divider';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import CartIcon from '@material-ui/icons/ShoppingBasket';
+import ChatToMerchant from '@material-ui/icons/Chat';
+import PersonIcon from '@material-ui/icons/Person';
+
+
 
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
@@ -42,6 +52,7 @@ class Brews extends React.Component {
   state = {
     brews: [],
     brand: "",
+    merchantImage : "",
     cartItems: [],
     expanded: false,
     description:""
@@ -55,6 +66,10 @@ class Brews extends React.Component {
           comerciante(id: "${this.props.match.params.brandId}") {
             _id
             name
+            description
+            image {
+              url
+            }
             productos {
               _id
               name
@@ -68,9 +83,13 @@ class Brews extends React.Component {
         }`
         }
       });
+
+      console.log("DATA "+ JSON.stringify(response.data.comerciante.image.url))
+
       this.setState({
         brews: response.data.comerciante.productos,
-        brand: response.data.comerciante.name,
+        brand: response.data.comerciante,
+        merchantImage : response.data.comerciante.image.url,
         description: response.data.comerciante.description,
         cartItems: getCart()
       });
@@ -109,7 +128,29 @@ class Brews extends React.Component {
 
 
   render() {
-    const { brand, brews, cartItems, description } = this.state;
+    const { brand, brews, cartItems, description,  merchantImage} = this.state;
+
+    const paperStyle = {
+      root: {
+        flexGrow: 1,
+      },
+      paper: {
+        padding: '16px',
+        margin: 'auto',
+        maxWidth: 500,
+      },
+      image: {
+        width: '170px'
+      },
+      img: {
+        margin: 'auto',
+        display: 'block',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        width: '170px'
+      },
+    }
+
     const cardStyle = {
       root: {
         display: 'block',
@@ -118,8 +159,7 @@ class Brews extends React.Component {
         height: '25vw'
       },
       media: {
-        width: '30px',
-        
+        width: '90%', 
       },
       div : {
         width: '90%'
@@ -168,53 +208,53 @@ class Brews extends React.Component {
       }
     };
 
+    const bottomNav = {
+      root: {
+        width: 500,
+      },
+    }
+
     return (
       <React.Fragment>
       <CssBaseline />
       <Container maxWidth="sm">
-        
 
-        <Card className={cardStyle.root} >
-            <CardActionArea>
+        <Paper className={paperStyle.paper} style={{paddingTop: "10px"}}>
+          <Grid container spacing={2}  xs={12}>
+            <Grid item xs={6}>
+              <ButtonBase className={paperStyle.image}>
+                <img style={{width: "170px"}} alt="complex" src={`${apiUrl}${merchantImage}`} />
+              </ButtonBase>
+            </Grid>
+            <Grid item xs={6} sm container>
+              <Grid item xs container direction="column" spacing={2}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="subtitle1">
+                  {brand.name}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                  {brand.description}
+                  </Typography>
+                </Grid>
+                <Grid item  style={{alignContent: 'center'}}>
+                  <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                  <Link to={{ pathname: `/chat/${this.props.match.params.brandId}`}}>
+                  <BottomNavigationAction label="Chats" icon={<ChatToMerchant />}   />
+                  </Link>
+                  </Typography>
+                </Grid>
+              </Grid>
 
-
-              <CardMedia title="Title">
-                <img src="http://ec2-18-223-187-192.us-east-2.compute.amazonaws.com:1337/uploads/7df9ebf0acc044f1bfbed43fb4533e37.jpg" className={cardStyle.media} />
-              </CardMedia>
-
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                {brand}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                Desayunos con sentido
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-              <Button size="small" color="primary">
-                Learn More
-              </Button>
-            </CardActions>
-          </Card>
-
-
-
+            </Grid>
+          </Grid>
+        </Paper>
 
 
       </Container>
 
-      <Divider />
       <br/>
 
       <Container maxWidth="lg">
-
-
-
-
 
           <Carousel
             swipeable={false}
@@ -243,23 +283,24 @@ class Brews extends React.Component {
                   <Card className={cardStyle.root}  >
                     <CardActionArea>
 
-                      <CardMedia title="Title" >
-                        <img src={`${apiUrl}${tile.image.url}`} className={cardStyle.media} />
+                      <CardMedia title="Title" alignItems="center" >
+                        <img src={`${apiUrl}${tile.image.url}`} className={cardStyle.media} style={{width: "90%", paddingLeft: '15px', paddingTop: '5px'       }} />
                       </CardMedia>
 
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
+                        <Typography gutterBottom variant="h6" component="h6">
                         {tile.name}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
                         {tile.description}
+                        
                         </Typography>
                       </CardContent>
                     </CardActionArea>
-                    <CardActions style={{justifyContent: 'center'}}>
+                    <CardActions  alignItems="right"  >
 
-                      <Button size="small" color="primary">
-                        <Icon style={{ fontSize: 50 }} onClick={() => this.addToCart(tile)} >add_shopping_cart</Icon>
+                      <Button size="small" color="black">
+                        <Icon style={{  fontSize: 30 }} onClick={() => this.addToCart(tile)} >add_shopping_cart</Icon>
                       </Button>
                     </CardActions>
                   </Card>
@@ -268,61 +309,20 @@ class Brews extends React.Component {
 
 
 </Carousel>
+<br/>
+<BottomNavigation className={bottomNav.root}>
+          <Link to='/inbox'>
+          <BottomNavigationAction label="Chats" icon={<ChatIcon />} onClick={() => this.goToChat()}  />
+          </Link>
+          <Link to='/cart'>
+          <BottomNavigationAction label="Favorites" icon={<CartIcon />} />
+          </Link>
+          <Link to='/profile'>
+          <BottomNavigationAction label="Favorites" icon={<PersonIcon />} />
+          </Link>
+        </BottomNavigation>
 
           </Container>
-
-          <Box alignSelf="end" marginTop={2} marginLeft={8}>
-          <Mask shape="rounded" wash>
-            <Box
-              display="flex"
-              direction="column"
-              alignItems="center"
-              padding={2}
-            >
-              {/* User Cart Heading */}
-              <Heading align="center" size="sm">
-                Your Cart
-              </Heading>
-              <Text color="gray" italic>
-                {cartItems.length} items selected
-              </Text>
-
-              {/* Cart Items */}
-              {cartItems.map(item => (
-                <Box key={item._id} display="flex" alignItems="center">
-                  <Text>
-                    {item.name} x {item.quantity} - $
-                    {(item.quantity * item.price).toFixed(2)}
-                  </Text>
-                  <IconButton
-                    accessibilityLabel="Delete Item"
-                    icon="cancel"
-                    size="sm"
-                    iconColor="red"
-                    onClick={() => this.deleteItemFromCart(item._id)}
-                  />
-                </Box>
-              ))}
-
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                direction="column"
-              >
-                <Box margin={2}>
-                  {cartItems.length === 0 && (
-                    <Text color="red">Please select some items</Text>
-                  )}
-                </Box>
-                <Text size="lg">Total: {calculatePrice(cartItems)}</Text>
-                <Text>
-                  <Link to="/checkout">Checkout</Link>
-                </Text>
-              </Box>
-            </Box>
-          </Mask>
-        </Box>
 
     </React.Fragment>
 

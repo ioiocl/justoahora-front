@@ -33,6 +33,9 @@ class Signin extends React.Component {
     try {
       this.setState({ loading: true });
       const response = await strapi.login(username, password);
+
+      localStorage.setItem("user_id", JSON.stringify(response.user._id));
+
       this.setState({ loading: false });
       setToken(response.jwt);
       this.redirectUser("/");

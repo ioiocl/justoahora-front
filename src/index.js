@@ -11,6 +11,9 @@ import Signup from "./components/Signup";
 import Checkout from "./components/Checkout";
 import Brews from "./components/Brews";
 import Chat from "./components/Chat";
+import Inbox from "./components/Inbox";
+import Cart from "./components/Cart";
+import Profile from "./components/Profile";
 
 import registerServiceWorker from "./registerServiceWorker";
 
@@ -35,9 +38,11 @@ const Root = () => (
         <Route component={Signin} path="/signin" />
         <Route component={Signup} path="/signup" />
         <PrivateRoute component={Checkout} path="/checkout" />
-        <PrivateRoute component={Chat} path="/chat" />
+        <PrivateRoute component={Chat} path="/chat/:userId" />
+        <PrivateRoute component={Inbox} path="/inbox" />
+        <PrivateRoute component={Cart} path="/cart" />
+        <PrivateRoute component={Profile} path="/profile" />
         <Route component={Brews} path="/:brandId" />
-
         
       </Switch>
     </React.Fragment>

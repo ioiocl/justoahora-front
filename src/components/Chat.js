@@ -13,11 +13,32 @@ const strapi = new Strapi(apiUrl);
 
 class Chat extends React.Component {
 
-    
+  async componentDidMount() {
+    const { match: { params } } = this.props;
 
+    try{
+        const response = await strapi.request("POST", "/graphql", {
+          data: {
+            query: `query {
+              comerciante(id: "${params.userId}") {
+                id,
+                name
+              }
+            }`
+          }
+        });
+        console.log("XXX "+ JSON.stringify(response));
+        this.setState({ comerciante: response.data.comerciante});
+      } catch (err) {
+        console.error(err);
+        
+      }
+
+  }
+
+    
   render() {
 
-    //const chatbox = Talk.Chatbox;
 
     const styles = {
 
@@ -26,28 +47,29 @@ class Chat extends React.Component {
         }
       }
 
+    let idCliente = localStorage.getItem("user_id")
+
     getPromise()
     .then(talkSession => {
-        console.log("JSONLS :"+JSON.stringify(talkSession))
 
         var me = new Talk.User({
             // must be any value that uniquely identifies this user
-            id: "123456",
-            name: "George Looney",
-            email: "george@looney.net",
+            id: idCliente,
+            name: "Pitu",
+            email: "george@pitu.net",
             photoUrl: "https://talkjs.com/docs/img/george.jpg"
         });
         
     var operator = new Talk.User({
         // just hardcode any user id, as long as your real users don't have this id
-        id: "myapp_operator",
-        name: "ExampleApp Operator",
-        email: "support@example.com",
+        id: this.state.comerciante.id,
+        name: "Pedido #4356",
+        email: "support@justoahora.com",
         photoUrl: "http://dmssolutions.nl/wp-content/uploads/2013/06/helpdesk.png",
         welcomeMessage: "Hi there! How can I help you?"
     });
 
-    var conversation = talkSession.getOrCreateConversation("item_2493");
+    var conversation = talkSession.getOrCreateConversation("merchant_"+ this.state.comerciante.id);
     conversation.setParticipant(me);
     conversation.setParticipant(operator);
     var chatbox = talkSession.createChatbox(conversation);
@@ -59,26 +81,7 @@ class Chat extends React.Component {
 
 
 
-    /*
 
-
-
-    var operator = new Talk.User({
-        // just hardcode any user id, as long as your real users don't have this id
-        id: "myapp_operator",
-        name: "ExampleApp Operator",
-        email: "support@example.com",
-        photoUrl: "http://dmssolutions.nl/wp-content/uploads/2013/06/helpdesk.png",
-        welcomeMessage: "Hi there! How can I help you?"
-    });
-
-    var conversation = window.talkSession.getOrCreateConversation("item_2493");
-    conversation.setParticipant(me);
-    conversation.setParticipant(operator);
-
-    var chatbox = window.talkSession.createChatbox(conversation);
-    chatbox.mount(document.getElementById("talkjs-container"));
-*/
     return (
 
 

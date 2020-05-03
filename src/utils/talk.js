@@ -68,11 +68,13 @@ export const getOperator = () => {
 export async function getPromise () {
 
     await Talk.ready;
+    let idCliente = localStorage.getItem("user_id")
+
 
     var me = new Talk.User({
         // must be any value that uniquely identifies this user
-        id: "123456",
-        name: "George Looney",
+        id: idCliente,
+        name: "Pitu",
         email: "george@looney.net",
         photoUrl: "https://talkjs.com/docs/img/george.jpg"
     });

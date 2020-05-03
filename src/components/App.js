@@ -18,8 +18,10 @@ import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import ChatIcon from '@material-ui/icons/Chat';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import ChatIcon from '@material-ui/icons/Forum';
+import ChatToMerchant from '@material-ui/icons/Chat';
+import CartIcon from '@material-ui/icons/ShoppingBasket';
+import PersonIcon from '@material-ui/icons/Person';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { initialize } from "../utils/talk";
 
@@ -192,11 +194,15 @@ initialize()
     <BottomNavigation
       className={bottomNav.root}
     >
-      <Link to='/chat'>
+      <Link to='/inbox'>
       <BottomNavigationAction label="Chats" icon={<ChatIcon />} onClick={() => this.goToChat()}  />
       </Link>
-      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+      <Link to='/cart'>
+      <BottomNavigationAction label="Favorites" icon={<CartIcon />} />
+      </Link>
+      <Link to='/profile'>
+      <BottomNavigationAction label="Favorites" icon={<PersonIcon />} />
+      </Link>
     </BottomNavigation>
 
         {/* Brands */}
